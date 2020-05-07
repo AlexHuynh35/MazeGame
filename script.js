@@ -29,7 +29,8 @@ function makeGrid(width, length, size) {
 }
 
 function carveMaze(grid, currentCell) {
-    grid[`x${currentCell[0]}`][`y${currentCell[1]}`].visited = true;
+    let cell = currentCell.split(" ");
+    grid[`x${cell[0]}`][`y${cell[1]}`].visited = true;
     let newCell = toNewCell(grid, currentCell);
     if (visitedCells.length === Object.keys(grid).length * Object.keys(grid["x0"]).length) {
         return true;
@@ -46,34 +47,34 @@ function toNewCell(grid, currentCell) {
     let direction = ["up", "down", "left", "right"];
     while (true) {
         let ranDirection = direction[Math.floor(Math.random() * direction.length)];
-        let cell = currentCell.split("");
-        let newC = currentCell.split("");
+        let currentC = currentCell.split(" ");
+        let newC = currentCell.split(" ");
         if (direction.length === 0) {
             return false;
         }
-        if (ranDirection === "up" && cell[1] !== "0" && grid[`x${cell[0]}`][`y${String(parseInt(cell[1]) - 1)}`].visited === false) {
-            newC[1] = String(parseInt(cell[1]) - 1);
-            grid[`x${cell[0]}`][`y${cell[1]}`].uBor = false;
+        if (ranDirection === "up" && currentC[1] !== "0" && grid[`x${currentC[0]}`][`y${String(parseInt(currentC[1]) - 1)}`].visited === false) {
+            newC[1] = String(parseInt(currentC[1]) - 1);
+            grid[`x${currentC[0]}`][`y${currentC[1]}`].uBor = false;
             grid[`x${newC[0]}`][`y${newC[1]}`].dBor = false;
-            return newC.join("");
+            return newC.join(" ");
         }
-        if (ranDirection === "down" && cell[1] !== String(Object.keys(grid["x0"]).length - 1) && grid[`x${cell[0]}`][`y${String(parseInt(cell[1]) + 1)}`].visited === false) {
-            newC[1] = String(parseInt(cell[1]) + 1);
-            grid[`x${cell[0]}`][`y${cell[1]}`].dBor = false;
+        if (ranDirection === "down" && currentC[1] !== String(Object.keys(grid["x0"]).length - 1) && grid[`x${currentC[0]}`][`y${String(parseInt(currentC[1]) + 1)}`].visited === false) {
+            newC[1] = String(parseInt(currentC[1]) + 1);
+            grid[`x${currentC[0]}`][`y${currentC[1]}`].dBor = false;
             grid[`x${newC[0]}`][`y${newC[1]}`].uBor = false;
-            return newC.join("");
+            return newC.join(" ");
         }
-        if (ranDirection === "left" && cell[0] !== "0" && grid[`x${String(parseInt(cell[0]) - 1)}`][`y${cell[1]}`].visited === false) {
-            newC[0] = String(parseInt(cell[0]) - 1);
-            grid[`x${cell[0]}`][`y${cell[1]}`].lBor = false;
+        if (ranDirection === "left" && currentC[0] !== "0" && grid[`x${String(parseInt(currentC[0]) - 1)}`][`y${currentC[1]}`].visited === false) {
+            newC[0] = String(parseInt(currentC[0]) - 1);
+            grid[`x${currentC[0]}`][`y${currentC[1]}`].lBor = false;
             grid[`x${newC[0]}`][`y${newC[1]}`].rBor = false;
-            return newC.join("");
+            return newC.join(" ");
         }
-        if (ranDirection === "right" && cell[0] !== String(Object.keys(grid).length - 1) && grid[`x${String(parseInt(cell[0]) + 1)}`][`y${cell[1]}`].visited === false) {
-            newC[0] = String(parseInt(cell[0]) + 1);
-            grid[`x${cell[0]}`][`y${cell[1]}`].rBor = false;
+        if (ranDirection === "right" && currentC[0] !== String(Object.keys(grid).length - 1) && grid[`x${String(parseInt(currentC[0]) + 1)}`][`y${currentC[1]}`].visited === false) {
+            newC[0] = String(parseInt(currentC[0]) + 1);
+            grid[`x${currentC[0]}`][`y${currentC[1]}`].rBor = false;
             grid[`x${newC[0]}`][`y${newC[1]}`].lBor = false;
-            return newC.join("");
+            return newC.join(" ");
         }
         direction.splice(direction.indexOf(ranDirection), 1);
     }
@@ -102,13 +103,14 @@ function drawMaze(grid) {
 function resetMaze() {
     grid = {};
     visitedCells = [];
-    makeGrid(10, 10, 50);
+    makeGrid(15, 15, 50);
     xLoc = 0;
     yLoc = Object.keys(grid["x0"]).length - 1;
     playerLoc(xLoc, yLoc);
-    visitedCells.push(String(xLoc) + String(yLoc));
+    visitedCells.push(String(xLoc) + " " + String(yLoc));
     carveMaze(grid, visitedCells[0]);
     drawMaze(grid);
+    console.log(grid);
 }
 
 function playerLoc(x, y) {
